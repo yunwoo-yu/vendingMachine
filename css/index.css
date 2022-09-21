@@ -1,0 +1,33 @@
+body {
+  background-color: #eae8fe;
+}
+
+header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 67px;
+}
+
+header h1 {
+  width: 386px;
+  height: 180px;
+  margin: 0 auto;
+}
+header h1 img {
+  width: 100%;
+}
+
+#wrap {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+}
+
+section {
+  width: 360px;
+  background-color: white;
+}
+
+#vendingMachine {
+  padding: 31px 27px 28px;
+}
