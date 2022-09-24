@@ -14,12 +14,9 @@
       <h1><img src="assets/images/logo.png" alt="콜라 자판기" /></h1>
     </header>
     <main id="wrap">
-      <section
-        id="
-      vendingMachine"
-      >
+      <section id="vendingMachine">
         <h2 class="blind">자판기</h2>
-        <ol class="itme-list">
+        <ul class="item-list">
           <li class="item">
             <img
               class="item-img"
@@ -74,21 +71,104 @@
             <p class="item-name">Orange_Cola</p>
             <p class="item-price">1000원</p>
           </li>
-        </ol>
-        <div>
-          <p>잔액: 0원</p>
-          <button>거스름돈 반환</button>
-          <form>
-            <input type="number" />
-            <button>입금</button>
+        </ul>
+        <div class="item-calculation">
+          <p class="item-balance">잔액: <span>0 원</span></p>
+          <button class="item-return-btn" type="button">거스름돈 반환</button>
+          <form class="item-put-money">
+            <label for="money" class="blind">입금액</label>
+            <input type="number" id="money" placeholder="입금액 입력" />
+            <button type="button" class="item-put-btn">입금</button>
           </form>
+        </div>
+        <div class="item-get">
+          <ul class="item-get-list">
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+          </ul>
+          <button type="button" class="item-get-btn">획득</button>
         </div>
       </section>
       <section id="getItemAndMoney">
         <h2 class="blind">소지금 및 획득음료목록</h2>
-        <div>
-          <p>소지금<span>25,000원</span></p>
-          <ul></ul>
+        <div class="money">
+          <p>소지금: <strong>25,000 원</strong></p>
+        </div>
+        <div class="item-result-box">
+          <p class="result-title">획득한 음료</p>
+          <ul class="item-get-result-list">
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+            <li>
+              <img
+                class="get-img"
+                src="assets/images/Original_Cola.png"
+                alt="test 이미지"
+              />
+              <p></p>
+              <span></span>
+            </li>
+          </ul>
+          <p class="sum">총금액 : 9,000원</p>
         </div>
       </section>
     </main>
