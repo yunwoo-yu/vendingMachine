@@ -49,6 +49,10 @@ header h1 img {
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   cursor: pointer;
+  box-sizing: border-box;
+}
+.item-list .item.active {
+  outline: 3px solid #6327fe;
 }
 
 .item-list .item-img {
@@ -173,7 +177,7 @@ header h1 img {
   display: flex;
   justify-content: space-between;
   padding: 6px 10px;
-  font-size: 14px;
+  font-size: 1.4rem;
   line-height: 20px;
   background-color: #eae8fe;
   border-radius: 5px;
@@ -223,6 +227,91 @@ header h1 img {
   margin: 6px auto 0;
   text-align: right;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 1.2rem;
   line-height: 17px;
+}
+
+@media screen and (max-width: 767px) {
+  body {
+    background-color: #fff;
+  }
+
+  /* 전역 스타일링 */
+
+  header {
+    margin-bottom: 18px;
+  }
+
+  header h1 {
+    width: 166px;
+    height: 100%;
+  }
+
+  #wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  #vendingMachine {
+    padding: 0;
+  }
+
+  .item-list {
+    justify-content: center;
+  }
+  .item-calculation {
+    justify-content: center;
+  }
+
+  .item-get {
+    justify-content: center;
+  }
+
+  .item-get .item-get-list::-webkit-scrollbar {
+    width: 12px;
+    height: 100%;
+  }
+  .item-get .item-get-list::-webkit-scrollbar-thumb {
+    background-color: #fff;
+    border-radius: 16px;
+    background-clip: padding-box;
+    border: 4px solid transparent;
+  }
+  .item-get .item-get-list::-webkit-scrollbar-track {
+    background-color: #eae8fe;
+    border-radius: 5px;
+  }
+
+  .item-get .item-get-list li {
+    width: 170px;
+    padding: 6px 0 7px;
+    background-color: white;
+  }
+
+  .item-get .item-get-list img {
+    width: 18px;
+    border-radius: 0;
+  }
+
+  .item-get .item-get-btn {
+    height: 106px;
+    background-color: #6327fe;
+    color: white;
+  }
+
+  #getItemAndMoney .money {
+    padding: 0;
+    background-color: white;
+    margin: 20px auto 41px;
+  }
+
+  #getItemAndMoney .money p {
+    width: 306px;
+    margin: 0 auto;
+  }
+  #getItemAndMoney .item-result-box .result-title {
+    padding-top: 0;
+  }
 }
