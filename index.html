@@ -73,7 +73,9 @@
           </li>
         </ul>
         <div class="item-calculation">
-          <p class="item-balance">잔액: <span>0 원</span></p>
+          <p class="item-balance">
+            잔액: <span class="inner-money">0 원</span>
+          </p>
           <button class="item-return-btn" type="button">거스름돈 반환</button>
           <form class="item-put-money">
             <label for="money" class="blind">입금액</label>
@@ -89,12 +91,12 @@
       <section id="getItemAndMoney">
         <h2 class="blind">소지금 및 획득음료목록</h2>
         <div class="money">
-          <p>소지금: <strong>25,000 원</strong></p>
+          <p>소지금: <strong class="total-money"></strong></p>
         </div>
         <div class="item-result-box">
           <p class="result-title">획득한 음료</p>
           <ul class="item-get-result-list"></ul>
-          <p class="sum">총금액 : 9,000원</p>
+          <p class="sum">총금액 : <span class="sum-amount"></span></p>
         </div>
       </section>
     </main>
