@@ -48,11 +48,29 @@ header h1 img {
   text-align: center;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
+  position: relative;
   cursor: pointer;
   box-sizing: border-box;
 }
 .item-list .item.active {
   outline: 3px solid #6327fe;
+}
+
+.item-list .item.soldOut {
+  outline: none;
+}
+
+.item-list .item.soldOut::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.8) url("../assets/images/Sold-out.png") center/70%
+    no-repeat;
 }
 
 .item-list .item-img {
@@ -152,13 +170,26 @@ header h1 img {
 
 .item-get .item-get-list li {
   width: 170px;
-  padding: 6px 0 7px;
+  height: 48.5px;
+  padding: 8px 8px 8px 10px;
   background-color: white;
+  display: flex;
+  align-items: center;
 }
 
 .item-get .item-get-list img {
   width: 18px;
   border-radius: 0;
+  margin-right: 10px;
+}
+
+.item-get .item-get-list .item-quantity {
+  font-size: 1.4rem;
+  line-height: 20px;
+  margin-left: auto;
+  padding: 4px 11px 6px;
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
 }
 
 .item-get .item-get-btn {
@@ -206,13 +237,32 @@ header h1 img {
   padding: 12px 0 0 12px;
   border: 1px solid #bdbdbd;
   border-radius: 5px;
+  overflow-y: auto;
 }
 
 #getItemAndMoney .item-get-result-list li {
   width: 276px;
-  padding: 6px 0 7px 10px;
+  height: 46px;
+  padding: 6px 8px 7px 10px;
   background-color: white;
   margin-bottom: 6px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+#getItemAndMoney .item-get-result-list li img {
+  width: 18px;
+  border-radius: 0;
+  margin-right: 10px;
+}
+
+#getItemAndMoney .item-get-result-list li .item-quantity {
+  font-size: 1.4rem;
+  line-height: 20px;
+  margin-left: auto;
+  padding: 4px 11px 6px;
+  border: 1px solid #bdbdbd;
   border-radius: 5px;
 }
 #getItemAndMoney .item-get-result-list li:last-child {
@@ -258,13 +308,8 @@ header h1 img {
     padding: 0;
   }
 
-  .item-list {
-    justify-content: center;
-  }
-  .item-calculation {
-    justify-content: center;
-  }
-
+  .item-list,
+  .item-calculation,
   .item-get {
     justify-content: center;
   }
@@ -286,7 +331,7 @@ header h1 img {
 
   .item-get .item-get-list li {
     width: 170px;
-    padding: 6px 0 7px;
+    padding: 6px 8px 7px 10px;
     background-color: white;
   }
 
