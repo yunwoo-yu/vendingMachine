@@ -6,75 +6,16 @@ const resultBtn = document.querySelector(".item-get-btn");
 const putMoneyBtn = document.querySelector(".item-put-btn");
 const innerMoney = document.querySelector(".inner-money");
 const returnBtn = document.querySelector(".item-return-btn");
+
 // 중복 여부를 체크하는 배열
-const addedIds = [];
-const addedResult = [];
+const cartItems = [];
+const resultItems = [];
 
 let inputMoney = document.querySelector("#money");
 let totalMoney = document.querySelector(".total-money");
 let sumAmount = document.querySelector(".sum-amount");
 
-// 소지금 , 추가
-totalMoney.textContent = `${priceToString(25000)} 원`;
-
-// 획득목록에 item을 추가하고 active클래스와 유니크한 class 추가
-const setColaItem = (item, id) => {
-  const imgSrc = item.querySelector(".item-img").getAttribute("src");
-  const title = item.querySelector(".item-name").textContent;
-  const cartElement = `
-  <li id=${id}>
-    <img class='item-img' src=${imgSrc} />
-    <p class='item-name'>${title}</p>
-    <span class='item-quantity'>${1}</span>
-  </li>
-  `;
-
-  item.classList.add("active");
-  item.classList.add(`${id}`);
-  cartList.innerHTML += cartElement;
-  addedIds.push(id);
-};
-
-const setResultItem = (item, id) => {
-  const title = item.querySelector(".item-name").textContent;
-  const imgSrc = item.querySelector(".item-img").getAttribute("src");
-  const quantity = item.querySelector(".item-quantity").textContent;
-
-  const ResultElement = `
-  <li id=${id}>
-    <img src=${imgSrc} />
-    <p>${title}</p>
-    <span class='item-quantity'>${quantity}</span>
-  </li>
-  `;
-
-  console.log(addedResult);
-  item.classList.add(`${id}`);
-  resultList.innerHTML += ResultElement;
-  addedResult.push(id);
-};
-
-const setResultQuantity = (id) => {
-  const cartQuantity = document.querySelector(`.${id}`).lastElementChild;
-
-  console.log(cartQuantity);
-
-  cartQuantity.textContent = parseInt(cartQuantity.textContent) + 1;
-};
-
-// 여러번 클릭 시 획득목록의 수량을 늘려주고 max값인 5를 넘으면 품절 class를 달아주는 함수
-const setQuantity = (id) => {
-  const cartQuantity = document.getElementById(`${id}`).lastElementChild;
-  const itemSelect = document.querySelector(`.${id}`);
-
-  if (parseInt(cartQuantity.textContent) >= 5) {
-    itemSelect.classList.add("soldOut");
-  } else {
-    cartQuantity.textContent = parseInt(cartQuantity.textContent) + 1;
-  }
-};
-
-// 현재 시간과 난수를 이용해 id를 생성하는 함수
+// 현재 시간과 random 메서드를 이용해 유니크한 id를 생성하는 함수
 const createUniqueId = () => {
   const time = `${new Date().getTime()}`.slice(-4);
   const randomNum = Math.floor(Math.random() * 10000);
@@ -82,70 +23,201 @@ const createUniqueId = () => {
   return `cartItem${time}${randomNum}`;
 };
 
-// 가격의 , 를 붙여주는 정규식
-function priceToString(price) {
+// 가격의 원화 , 를 붙여주는 함수
+const priceToString = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+};
 
 // 가격의 , 를 제거한 정수를 리턴해주는 함수
-function stringNumberToInt(stringNumber) {
+const stringNumberToInt = (stringNumber) => {
   return parseInt(stringNumber.replace(/,/g, ""));
-}
+};
 
-//거스름돈 반환 클릭 이벤트
-returnBtn.addEventListener("click", () => {
+/////////////////////////// 상단함수는 유틸 함수 입니다. /////////////////////////////
+
+// 클릭한 상품을 cartItems 배열에 넣어주는 함수 (이미 있다면 수량만 증가)
+const setCartItem = (item, id) => {
+  const src = item.querySelector(".item-img").getAttribute("src");
+  const title = item.querySelector(".item-name").textContent;
+  const findItemIdx = cartItems.findIndex((el) => el.id === id);
+  let count = 1;
+
+  if (findItemIdx !== -1) {
+    if (cartItems[findItemIdx].count >= 5) {
+      item.classList.add("soldOut");
+      return;
+    }
+    return cartItems[findItemIdx].count++;
+  }
+
+  // 선택표시 active class 추가
+  item.classList.add("active");
+
+  // soldOut 상태라면 배열에 push X
+  if (!item.classList.contains("soldOut")) {
+    cartItems.push({ id, src, title, count });
+  }
+};
+
+// 상품 클릭 시 setCartItem 함수에서 객체를 넣어준 cartItems 배열에서 정보를 가져와 장바구니에 상품을 렌더링 해주는 함수
+const renderCartItem = () => {
+  cartList.innerHTML = "";
+
+  cartItems.forEach((item) => {
+    cartList.innerHTML += `
+     <li id=${item.id}>
+    <img class='item-img' src=${item.src} />
+    <p class='item-name'>${item.title}</p>
+    <span class='item-quantity'>${item.count}</span>
+  </li>
+  `;
+  });
+};
+
+// 획득 버튼 클릭 시 cartItems 배열에서 정보를 가져와 resultItems배열에 넣어주는 함수 (이미 있다면 수량만 증가)
+const setResultItem = (item) => {
+  const src = item.src;
+  const title = item.title;
+  const findItemIdx = resultItems.findIndex((el) => el.title === title);
+
+  if (findItemIdx !== -1) {
+    return (resultItems[findItemIdx].count += item.count);
+  }
+
+  resultItems.push({ src, title, count: item.count });
+};
+
+// 획득 버튼 클릭 시 setResultItem 함수에서 객체를 넣어준 resultItems 배열에서 정보를 가져와 획득한 음료에 상품을 렌더링 해주는 함수
+const renderResultItem = () => {
+  resultList.innerHTML = "";
+
+  resultItems.forEach((item) => {
+    resultList.innerHTML += `
+     <li>
+    <img class='item-img' src=${item.src} />
+    <p class='item-name'>${item.title}</p>
+    <span class='item-quantity2'>${item.count}</span>
+  </li>
+  `;
+  });
+
+  cartList.innerHTML = "";
+};
+
+// 카트 배열을 비워주는 함수
+const deleteCart = () => {
+  for (let i = cartItems.length; i > 0; i--) {
+    cartItems.pop();
+  }
+};
+
+// 거스름돈 반환 함수
+const getReturnMoneys = () => {
   totalMoney.textContent = `${priceToString(
     stringNumberToInt(totalMoney.textContent) +
       stringNumberToInt(innerMoney.textContent)
   )} 원`;
   innerMoney.textContent = `${0} 원`;
+};
+
+// 획득 시 입금액 차감 함수
+const setMoney = (sum) => {
+  innerMoney.textContent = priceToString(
+    `${stringNumberToInt(innerMoney.textContent) - sum} 원`
+  );
+};
+
+// 입금 함수
+const putMoney = () => {
+  innerMoney.textContent = `${priceToString(
+    stringNumberToInt(innerMoney.textContent) +
+      stringNumberToInt(inputMoney.value)
+  )} 원`;
+  totalMoney.textContent = `${priceToString(
+    stringNumberToInt(totalMoney.textContent) - inputMoney.value
+  )} 원`;
+  inputMoney.value = "";
+};
+
+// 획득 시 상품 클래스 초기화 함수
+const setClassName = () => {
+  colaItems.forEach((item) => {
+    item.classList.remove("active");
+  });
+};
+
+// 총금액 합산 함수
+const resultSum = () => {
+  let resultQuantity = 0;
+  resultItems.forEach((item) => {
+    resultQuantity += item.count;
+  });
+  return (sumAmount.textContent = priceToString(1000 * resultQuantity));
+};
+
+////////////////////////// 이벤트 ////////////////////////////
+
+// 소지금 , 추가
+totalMoney.textContent = `${priceToString(25000)} 원`;
+
+//거스름돈 반환 클릭 이벤트
+returnBtn.addEventListener("click", () => {
+  getReturnMoneys();
 });
 
-// 입금버튼 클릭 이벤트
-putMoneyBtn.addEventListener("click", () => {
+// 입금 버튼 클릭 이벤트
+putMoneyBtn.addEventListener("click", (e) => {
+  e.preventDefault();
   if (inputMoney.value > stringNumberToInt(totalMoney.textContent)) {
-    alert("소지금보다 작은 금액을 입력해 주세요.");
+    alert("소지금이 부족합니다.");
+    inputMoney.focus();
   } else if (inputMoney.value === "") {
     alert("입금액을 입력해주세요.");
+    inputMoney.focus();
   } else {
-    innerMoney.textContent = `${priceToString(
-      stringNumberToInt(innerMoney.textContent) +
-        stringNumberToInt(inputMoney.value)
-    )} 원`;
-    totalMoney.textContent = `${priceToString(
-      stringNumberToInt(totalMoney.textContent) - inputMoney.value
-    )} 원`;
-
-    inputMoney.value = "";
+    putMoney();
   }
 });
 
-//획득 버튼클릭 시 소지품목록에 들어가는 이벤트
-resultBtn.addEventListener("click", () => {
-  const cartLi = document.querySelectorAll(".item-get-list li");
+// 상품 클릭 이벤트
+colaItems.forEach((item) => {
+  // 유니크한 id 생성
+  const id = createUniqueId();
 
-  cartLi.forEach((item) => {
-    const resultId = createUniqueId();
-    if (addedResult.includes(resultId)) {
-      setResultQuantity(resultId);
-    } else {
-      setResultItem(item, resultId);
-    }
+  // 클릭이벤트 중복여부를 체크하는 배열에 유니크한 id가 있으면 수량을 늘려주는 함수
+  // 배열에 id가 없다면 획득 목록에 렌더링해주는 함수를 실행
+  item.addEventListener("click", () => {
+    setCartItem(item, id);
+    renderCartItem();
   });
 });
 
-// 각각의 li 클릭이벤트 및 획득목록에 들어가는 유니크한 id 추가
-colaItems.forEach((item) => {
-  // 유니크 id 생성
-  const id = createUniqueId();
-
-  // 클릭이벤트 중복여부를 체크하는 배열에 유니크한 id가 있으면 수량을 늘려주는 함수를 실행하고
-  // 배열에 id가 없다면 획득목록에 추가해주는 함수를 실행
-  item.addEventListener("click", () => {
-    if (addedIds.includes(id)) {
-      setQuantity(id);
-    } else {
-      setColaItem(item, id);
-    }
+// 획득 버튼 클릭이벤트
+resultBtn.addEventListener("click", () => {
+  const cartQuantity = document.querySelectorAll(".item-quantity");
+  let sum = 0;
+  console.log(cartQuantity);
+  cartQuantity.forEach((item) => {
+    sum += 1000 * stringNumberToInt(item.textContent);
   });
+
+  if (!cartItems.length) {
+    alert("장바구니에 음료가 없습니다");
+  }
+
+  if (stringNumberToInt(innerMoney.textContent) >= sum) {
+    cartItems.forEach((item) => {
+      setResultItem(item);
+      renderResultItem();
+    });
+    setMoney(sum);
+    deleteCart();
+    resultSum();
+    setClassName();
+  } else {
+    alert("잔액이 부족합니다.");
+    inputMoney.focus();
+  }
+
+  sum = 0;
 });
