@@ -5,7 +5,7 @@ const resultList = document.querySelector(".item-get-result-list");
 const resultBtn = document.querySelector(".item-get-btn");
 const putMoneyBtn = document.querySelector(".item-put-btn");
 const innerMoney = document.querySelector(".inner-money");
-const returnBtn = document.querySelector(".item-return-btn");
+const returnMoneyBtn = document.querySelector(".item-return-btn");
 
 // 중복 여부를 체크하는 배열
 const cartItems = [];
@@ -161,7 +161,7 @@ const resultSum = () => {
 totalMoney.textContent = `${priceToString(25000)} 원`;
 
 //거스름돈 반환 클릭 이벤트
-returnBtn.addEventListener("click", () => {
+returnMoneyBtn.addEventListener("click", () => {
   getReturnMoneys();
 });
 
@@ -196,7 +196,6 @@ colaItems.forEach((item) => {
 resultBtn.addEventListener("click", () => {
   const cartQuantity = document.querySelectorAll(".item-quantity");
   let sum = 0;
-  console.log(cartQuantity);
   cartQuantity.forEach((item) => {
     sum += 1000 * stringNumberToInt(item.textContent);
   });
